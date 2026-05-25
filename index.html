@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FusionAILaw - Practical AI Automation for Law Firms & Small Businesses</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0B0F19',
+                            darker: '#060913',
+                            accent: '#3B82F6', // Vibrant blue
+                            cyan: '#06B6D4',   // Neon cyan
+                            violet: '#8B5CF6', // Neon violet
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon-cyan': '0 0 15px -3px rgba(6, 182, 212, 0.4)',
+                        'neon-violet': '0 0 15px -3px rgba(139, 92, 246, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #060913;
+        }
+        /* Custom scrollbar for premium feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E293B;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+        /* Page transition states */
+        .page-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+        .page-section.active {
+            display: block;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col overflow-x-hidden selection:bg-cyan-500 selection:text-slate-900">
+
+    <!-- Floating Header Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-brand-dark/80 backdrop-blur-md border-b border-slate-800/80 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#" onclick="navigateTo('home'); return false;" class="flex items-center space-x-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-cyan to-brand-violet flex items-center justify-center shadow-neon-cyan group-hover:scale-105 transition-transform">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">FUSION AI</span>
+                        <span class="text-xs block text-brand-cyan tracking-widest font-bold">LAW AUTOMATION</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <button onclick="navigateTo('home')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/40 transition-all" data-page="home">Home</button>
+                    <button onclick="navigateTo('services')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/40 transition-all" data-page="services">Our AI Agents</button>
+                    <button onclick="navigateTo('calculator')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/40 transition-all" data-page="calculator">ROI Calculator</button>
+                    <button onclick="navigateTo('about')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/40 transition-all" data-page="about">Our Story</button>
+                    <button onclick="navigateTo('contact')" class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/40 transition-all" data-page="contact">Contact Us</button>
+                </nav>
+
+                <!-- Action Button -->
+                <div class="hidden md:block">
+                    <button onclick="navigateTo('contact')" class="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-white rounded-lg group bg-gradient-to-br from-brand-cyan to-brand-violet group-hover:from-brand-cyan group-hover:to-brand-violet hover:text-white focus:ring-4 focus:outline-none focus:ring-cyan-800">
+                        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-brand-dark rounded-md group-hover:bg-opacity-0">
+                            Book Free Audit
+                        </span>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-slate-400 hover:text-white focus:outline-none p-2 rounded-md" aria-label="Toggle Menu">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path id="menu-icon-hamburger" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-b border-slate-800 transition-all duration-300">
+            <div class="px-2 pt-2 pb-4 space-y-1">
+                <button onclick="navigateTo('home'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800/60" data-page-mobile="home">Home</button>
+                <button onclick="navigateTo('services'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800/60" data-page-mobile="services">Our AI Agents</button>
+                <button onclick="navigateTo('calculator'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800/60" data-page-mobile="calculator">ROI Calculator</button>
+                <button onclick="navigateTo('about'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800/60" data-page-mobile="about">Our Story</button>
+                <button onclick="navigateTo('contact'); toggleMobileMenu();" class="block w-full text-left px-4 py-3 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800/60" data-page-mobile="contact">Contact Us</button>
+                <div class="pt-4 pb-2 px-4 border-t border-slate-800">
+                    <button onclick="navigateTo('contact'); toggleMobileMenu();" class="w-full text-center py-3 bg-gradient-to-r from-brand-cyan to-brand-violet text-white font-semibold rounded-lg shadow-neon-cyan">
+                        Book Free Audit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Global Custom Alerts/Toasts System -->
+    <div id="toast-container" class="fixed top-24 right-4 z-50 flex flex-col space-y-3 pointer-events-none"></div>
+
+    <main class="flex-grow pt-20">
+
+        <!-- HOME PAGE -->
+        <div id="page-home" class="page-section active">
+            <!-- Hero Section -->
+            <section class="relative py-20 lg:py-32 overflow-hidden">
+                <!-- Abstract Glows -->
+                <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-cyan/10 rounded-full blur-[120px] pointer-events-none"></div>
+                <div class="absolute bottom-10 right-10 w-[300px] h-[300px] bg-brand-violet/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+
+                        <!-- Left Info Column -->
+                        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                            <div class="inline-flex items-center space-x-2 px-3 py-1 bg-slate-800/60 border border-slate-700/60 rounded-full text-xs font-semibold tracking-wider text-brand-cyan uppercase">
+                                <span class="flex h-2 w-2 rounded-full bg-brand-cyan animate-pulse"></span>
+                                <span>Leveling the playing field for growing businesses</span>
+                            </div>
+
+                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1]">
+                                Dominate Your Market with <span class="bg-gradient-to-r from-brand-cyan to-brand-violet bg-clip-text text-transparent">Practical AI Agents</span>
+                            </h1>
+
+                            <p class="text-lg text-slate-400 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                                We help small and service-based businesses compete in a rapidly changing world. Get custom-built AI automation that slashes repetitive work, boosts response times, and multiplies your efficiency without hiring overhead.
+                            </p>
+
+                            <!-- Hero Stats / CTAs -->
+                            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                                <button onclick="navigateTo('contact')" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-brand-cyan to-brand-violet hover:from-cyan-400 hover:to-violet-500 text-slate-950 font-bold rounded-xl shadow-lg shadow-brand-cyan/20 transform hover:-translate-y-0.5 transition-all text-center">
+                                    Claim Your Free AI Audit
+                                </button>
+                                <button onclick="navigateTo('services')" class="w-full sm:w-auto px-8 py-4 bg-slate-900 border border-slate-800 hover:bg-slate-800/50 hover:border-slate-700 text-slate-300 font-semibold rounded-xl transition-all text-center">
+                                    Explore Core Agents
+                                </button>
+                            </div>
+
+                            <!-- Value badges -->
+                            <div class="grid grid-cols-3 gap-4 pt-8 border-t border-slate-800/80 max-w-lg mx-auto lg:mx-0">
+                                <div class="text-center lg:text-left">
+                                    <span class="block text-2xl lg:text-3xl font-extrabold text-white">24/7/365</span>
+                                    <span class="text-xs text-slate-500 font-medium">Customer Support</span>
+                                </div>
+                                <div class="text-center lg:text-left">
+                                    <span class="block text-2xl lg:text-3xl font-extrabold text-white">&lt; 3 Sec</span>
+                                    <span class="text-xs text-slate-500 font-medium">Lead Response Time</span>
+                                </div>
+                                <div class="text-center lg:text-left">
+                                    <span class="block text-2xl lg:text-3xl font-extrabold text-white">Zero</span>
+                                    <span class="text-xs text-slate-500 font-medium">Extra Overhead</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Interactive AI Agent Simulator Widget -->
+                        <div class="lg:col-span-5 relative">
+                            <div class="relative bg-gradient-to-b from-slate-900 to-brand-dark border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+                                <!-- Simulator Topbar -->
+                                <div class="bg-slate-950/80 px-6 py-4 border-b border-slate-800/80 flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                    </div>
+                                    <span class="text-xs text-slate-500 font-mono tracking-wider uppercase">Live Simulator Sandbox</span>
+                                    <div class="w-4 h-4 rounded-full bg-brand-cyan/20 flex items-center justify-center animate-pulse">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-brand-cyan"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Agent selector tabs inside Sandbox -->
+                                <div class="grid grid-cols-3 bg-slate-950/40 border-b border-slate-800 text-center text-xs">
+                                    <button onclick="setSimulatedAgent('cs')" id="sim-tab-cs" class="py-3 px-1 font-medium border-b-2 border-brand-cyan text-brand-cyan transition-colors">
+                                        CS Support
+                                    </button>
+                                    <button onclick="setSimulatedAgent('lead')" id="sim-tab-lead" class="py-3 px-1 font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">
+                                        Lead Response
+                                    </button>
+                                    <button onclick="setSimulatedAgent('book')" id="sim-tab-book" class="py-3 px-1 font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition-colors">
+                                        Appt Scheduler
+                                    </button>
+                                </div>
+
+                                <!-- Chat Output Log -->
+                                <div id="chat-output" class="h-80 overflow-y-auto p-6 space-y-4 text-sm scroll-smooth">
+                                    <!-- Messages inject here via JS -->
+                                </div>
+
+                                <!-- Suggestion Pills -->
+                                <div id="chat-suggestions" class="px-6 py-3 border-t border-slate-800/50 bg-slate-950/20 flex flex-wrap gap-2">
+                                    <!-- Injected options -->
+                                </div>
+
+                                <!-- Mini user feedback notice -->
+                                <div class="bg-slate-950/60 py-2.5 px-6 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500">
+                                    <span id="agent-typing-indicator" class="invisible">Agent is typing...</span>
+                                    <span class="italic">Interact with the pills above!</span>
+                                </div>
+                            </div>
+
+                            <!-- Small absolute positioning decor -->
+                            <div class="absolute -bottom-6 -right-6 w-24 h-24 bg-brand-violet/20 rounded-full blur-2xl z-0"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trust and Capabilities Highlight Section -->
+            <section class="py-16 bg-slate-950/50 border-y border-slate-800/50 relative">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-3xl mx-auto mb-16">
+                        <h2 class="text-xs font-bold tracking-widest text-brand-cyan uppercase">Core Core Capabilities</h2>
+                        <p class="text-3xl font-bold text-white mt-2">What Can Our Custom AI Agents Do?</p>
+                        <p class="text-slate-400 mt-4">We don't build useless chatbots. We program highly contextual agents that tie into your actual databases, scheduling systems, and messaging stacks to automate real operations.</p>
+                    </div>
+
+                    <!-- Services Trio Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Card 1 -->
+                        <div class="bg-brand-dark/50 border border-slate-800 hover:border-brand-cyan/40 p-8 rounded-2xl transition-all group hover:-translate-y-1">
+                            <div class="w-12 h-12 rounded-xl bg-brand-cyan/10 flex items-center justify-center text-brand-cyan mb-6 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">AI Customer Service</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                                24/7 custom support agents that master your brand parameters. They read your knowledge base to answer client concerns instantly across SMS, web, or email.
+                            </p>
+                            <button onclick="navigateTo('services')" class="text-brand-cyan text-xs font-bold tracking-wider uppercase inline-flex items-center space-x-2 hover:underline">
+                                <span>See Specifications</span>
+                                <span>&rarr;</span>
+                            </button>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="bg-brand-dark/50 border border-slate-800 hover:border-brand-violet/40 p-8 rounded-2xl transition-all group hover:-translate-y-1">
+                            <div class="w-12 h-12 rounded-xl bg-brand-violet/10 flex items-center justify-center text-brand-violet mb-6 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">AI Lead Qualification</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                                Stop losing hot leads to delayed response times. This agent reaches out instantly to contact submissions, qualifying prospects and capturing vital sales data automatically.
+                            </p>
+                            <button onclick="navigateTo('services')" class="text-brand-violet text-xs font-bold tracking-wider uppercase inline-flex items-center space-x-2 hover:underline">
+                                <span>See Specifications</span>
+                                <span>&rarr;</span>
+                            </button>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="bg-brand-dark/50 border border-slate-800 hover:border-brand-cyan/40 p-8 rounded-2xl transition-all group hover:-translate-y-1">
+                            <div class="w-12 h-12 rounded-xl bg-cyan-400/10 flex items-center justify-center text-cyan-400 mb-6 group-hover:scale-110 transition-transform">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-3">AI Appointment Booking</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                                Fully synchronized scheduling. The agent checks calendar availability, offers precise slot parameters, locks in the booking, and delivers confirmations and reminders on autopilot.
+                            </p>
+                            <button onclick="navigateTo('services')" class="text-brand-cyan text-xs font-bold tracking-wider uppercase inline-flex items-center space-x-2 hover:underline">
+                                <span>See Specifications</span>
+                                <span>&rarr;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- The "Why Us" Enterprise Level Tech for SMBs section -->
+            <section class="py-20 lg:py-28 relative">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                        <div>
+                            <h3 class="text-xs font-bold tracking-widest text-brand-violet uppercase">Enterprise Tech For SMBs</h3>
+                            <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2 leading-tight">
+                                Giving Small Businesses the Power to Compete with Corporations
+                            </h2>
+                            <p class="text-slate-400 mt-6 leading-relaxed">
+                                Huge corporations have entire engineering teams dedicated to proprietary AI integrations. We leveled that advantage. Our tailored workflows deliver world-class operational enhancements directly into your service-based or small business.
+                            </p>
+                            <div class="space-y-4 mt-8">
+                                <div class="flex items-start space-x-4">
+                                    <div class="mt-1 w-6 h-6 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 shrink-0">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-semibold">Risk-Free Integration</h4>
+                                        <p class="text-slate-500 text-sm">We handle all technical configuration, integrations, API endpoints, and long-term diagnostic tracking.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="mt-1 w-6 h-6 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 shrink-0">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-semibold">100% Brand-Aligned Data</h4>
+                                        <p class="text-slate-500 text-sm">Our bots adhere strictly to safety rules, refusing questions outside designated company data scope.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="mt-1 w-6 h-6 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400 shrink-0">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-white font-semibold">Measurable Operational Value</h4>
+                                        <p class="text-slate-500 text-sm">Quantifiable progress parameters. Track every appointment scheduled, lead captured, and support conversation solved.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Graphics Column -->
+                        <div class="bg-gradient-to-tr from-slate-900 to-slate-900/40 p-8 border border-slate-800/80 rounded-2xl relative overflow-hidden">
+                            <div class="absolute -top-10 -left-10 w-40 h-40 bg-brand-cyan/10 rounded-full blur-2xl"></div>
+
+                            <h4 class="text-sm font-bold tracking-wider text-slate-300 uppercase mb-6 flex items-center space-x-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block animate-ping"></span>
+                                <span>Live Performance Indicators</span>
+                            </h4>
+
+                            <div class="space-y-5">
+                                <div class="bg-brand-dark/80 p-4 border border-slate-800 rounded-xl">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-slate-400 text-xs font-semibold">Avg. Response Time Acceleration</span>
+                                        <span class="text-emerald-400 text-xs font-bold font-mono">-98.7%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-400 h-2 rounded-full w-[98.7%]"></div>
+                                    </div>
+                                    <span class="text-[10px] text-slate-600 mt-1 block">From 4.5 Hours manual down to 2.4 Seconds AI</span>
+                                </div>
+
+                                <div class="bg-brand-dark/80 p-4 border border-slate-800 rounded-xl">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-slate-400 text-xs font-semibold">Appointment Scheduling Accuracy</span>
+                                        <span class="text-brand-cyan text-xs font-bold font-mono">100%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
+                                        <div class="bg-brand-cyan h-2 rounded-full w-[100%]"></div>
+                                    </div>
+                                    <span class="text-[10px] text-slate-600 mt-1 block">Zero double bookings or time zone discrepancies</span>
+                                </div>
+
+                                <div class="bg-brand-dark/80 p-4 border border-slate-800 rounded-xl">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-slate-400 text-xs font-semibold">Lead-to-Meeting Conversion Boost</span>
+                                        <span class="text-brand-violet text-xs font-bold font-mono">+42.5%</span>
+                                    </div>
+                                    <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
+                                        <div class="bg-brand-violet h-2 rounded-full w-[42.5%]"></div>
+                                    </div>
+                                    <span class="text-[10px] text-slate-600 mt-1 block">Due to immediate follow-ups on web contact submissions</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 text-center">
+                                <button onclick="navigateTo('calculator')" class="w-full py-3 bg-brand-cyan/10 hover:bg-brand-cyan/20 text-brand-cyan hover:text-white border border-brand-cyan/20 rounded-xl font-bold transition-all text-sm">
+                                    Estimate Your Company's Savings &rarr;
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- SERVICES PAGE -->
+        <div id="page-services" class="page-section">
+            <section class="py-16 relative">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Heading -->
+                    <div class="text-center max-w-3xl mx-auto mb-20">
+                        <span class="px-3 py-1 bg-brand-cyan/10 text-brand-cyan text-xs font-semibold rounded-full border border-brand-cyan/20 uppercase tracking-widest">Our Solutions Stack</span>
+                        <h1 class="text-4xl lg:text-5xl font-extrabold text-white mt-4 tracking-tight">Tailored Intelligent Agents</h1>
+                        <p class="text-slate-400 text-base mt-4 leading-relaxed">
+                            Discover the engineering specifics of our three main service platforms. We build these systems customized to integrate flawlessly with your workflow patterns.
+                        </p>
+                    </div>
+
+                    <!-- Service Detailed Block 1 -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-28">
+                        <!-- Graphic Panel -->
+                        <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-brand-dark border border-slate-800 p-8 rounded-2xl relative overflow-hidden order-last lg:order-first">
+                            <div class="absolute -bottom-10 -right-10 w-36 h-36 bg-brand-cyan/10 rounded-full blur-2xl"></div>
+                            <span class="text-xs font-mono text-brand-cyan uppercase tracking-wider block mb-2">Capabilities Sandbox Spec</span>
+                            <h3 class="text-lg font-bold text-white mb-4">Customer Support Interface</h3>
+
+                            <div class="space-y-3 bg-slate-950/60 p-4 border border-slate-800 rounded-xl mb-6">
+                                <div class="bg-slate-900 border border-slate-800 p-2.5 rounded-lg text-xs">
+                                    <span class="text-slate-500 font-bold block mb-1">USER QUERY</span>
+                                    <span class="text-slate-300">Are you available for residential roofing repairs in North Hills?</span>
+                                </div>
+                                <div class="bg-brand-cyan/5 border border-brand-cyan/20 p-2.5 rounded-lg text-xs">
+                                    <span class="text-brand-cyan font-bold block mb-1">AI AGENT REPLY</span>
+                                    <span class="text-slate-300">Yes! We service all of North Hills. We also offer 24/7 emergency leak repair. Would you like a roofing tech to head out tomorrow?</span>
+                                </div>
+                            </div>
+
+                            <ul class="text-xs space-y-2 text-slate-500">
+                                <li class="flex items-center space-x-2"><span class="w-1.5 h-1.5 rounded-full bg-brand-cyan"></span> <span>Auto-reads Google Docs or Website PDFs for company answers</span></li>
+                                <li class="flex items-center space-x-2"><span class="w-1.5 h-1.5 rounded-full bg-brand-cyan"></span> <span>Zero response lag on standard, repetitive client queries</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- Description Panel -->
+                        <div class="lg:col-span-7 space-y-6">
+                            <span class="text-brand-cyan text-sm font-bold uppercase tracking-wider">Solution #1</span>
+                            <h2 class="text-3xl font-extrabold text-white">AI Customer Service Agents</h2>
+                            <p class="text-slate-400 leading-relaxed">
+                                Our support agents operate 24 hours a day, answering inquiries instantly with perfect customer service manners. By programming them strictly around your business's protocols, FAQs, and product sheets, they eliminate response delay completely and boost retention.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 text-sm text-slate-300">
+                                <div class="flex items-center space-x-3 bg-slate-900/60 border border-slate-800/40 p-3 rounded-xl">
+                                    <span class="text-brand-cyan font-bold text-lg">✓</span>
+                                    <span>Omnichannel (Web, SMS, email)</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-slate-900/60 border border-slate-800/40 p-3 rounded-xl">
+                                    <span class="text-brand-cyan font-bold text-lg">✓</span>
+                                    <span>Brand Tone Alignment</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-slate-900/60 border border-slate-800/40 p-3 rounded-xl">
+                                    <span class="text-brand-cyan font-bold text-lg">✓</span>
+                                    <span>Seamless Human Hand-off</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-slate-900/60 border border-slate-800/40 p-3 rounded-xl">
+                                    <span class="text-brand-cyan font-bold text-lg">✓</span>
+                                    <span>Multilingual Support</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service Detailed Block 2 -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-28">
+                        <!-- Description Panel -->
+                        <div class="lg:col-span-7 space-y-6">
+                            <span class="text-brand-violet text-sm font-bold uppercase tracking-wider">Solution #2</span>
+                            <h2 class="text-3xl font-extrabold text-white">AI Lead Response & Qualification</h2>
+                            <p class="text-slate-400 leading-relaxed">
+                                Lead response time is the single highest correlation factor for small business sales conversions. Our Lead Qualification agent catches form-fills immediately, contacts the potential client in seconds, clarifies their requirements, and stores key customer context into your CRM automatically.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 text-sm text-slate-300">
+                                <div class="flex items-center space-x-3 bg-slate-900/60 border border-slate-800/40 p-3 rounded-xl">
+                                    <span class="text-brand-violet font-bold text-lg">✓</span>
+                                    <span>Instant Auto-Response</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-slate-900/60 border border-slate-800/40 p-3 rounded-xl">
+                                    <span class="text-brand-violet font-bold text-lg">✓</span>
+                                    <span>Client Intention Qualification</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-slate-900/60 border border-slate-800/40 p-3 rounded-xl">
+                                    <span class="text-brand-violet font-bold text-lg">✓</span>
+                                    <span>CRM Integration (HubSpot, etc.)</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-slate-900/60 border border-slate-800/40 p-3 rounded-xl">
+                                    <span class="text-brand-violet font-bold text-lg">✓</span>
+                                    <span>Lead Rating & Prioritization</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Graphic Panel -->
+                        <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-brand-dark border border-slate-800 p-8 rounded-2xl relative overflow-hidden">
+                            <div class="absolute -top-10 -left-10 w-36 h-36 bg-brand-violet/10 rounded-full blur-2xl"></div>
+                            <span class="text-xs font-mono text-brand-violet uppercase tracking-wider block mb-2">Qualifications Pipeline</span>
+                            <h3 class="text-lg font-bold text-white mb-4">Immediate Conversion Funnel</h3>
+
+                            <div class="space-y-3">
+                                <div class="bg-slate-950 p-3 border border-slate-800 rounded-xl flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">Form Submitted</span>
+                                    <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-slate-400">Time: 0.0s</span>
+                                </div>
+                                <div class="bg-slate-950 p-3 border border-brand-violet/40 rounded-xl flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-brand-violet">AI Auto-Sms Outbound</span>
+                                    <span class="text-[10px] bg-brand-violet/10 text-brand-violet px-2 py-0.5 rounded">Time: 2.1s</span>
+                                </div>
+                                <div class="bg-slate-950 p-3 border border-slate-800 rounded-xl flex justify-between items-center">
+                                    <span class="text-xs font-semibold text-slate-300">Lead Intention Clarified</span>
+                                    <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded text-slate-400">Time: 1.5 min</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service Detailed Block 3 -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                        <!-- Graphic Panel -->
+                        <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-brand-dark border border-slate-800 p-8 rounded-2xl relative overflow-hidden order-last lg:order-first">
+                            <div class="absolute -bottom-10 -right-10 w-36 h-36 bg-brand-cyan/10 rounded-full blur-2xl"></div>
+                            <span class="text-xs font-mono text-brand-cyan uppercase tracking-wider block mb-2">Google & Outlook Calendar Sync</span>
+                            <h3 class="text-lg font-bold text-white mb-4">Availability Engine</h3>
+
+                            <div class="bg-slate-950/80 rounded-xl p-4 border border-slate-800 space-y-3">
+                                <div class="text-xs text-slate-400">Offered slots matched against live calendar availability:</div>
+                                <div class="grid grid-cols-2 gap-2 text-xs">
+                                    <div class="bg-slate-900 p-2.5 rounded border border-slate-800 text-center font-medium text-white hover:border-brand-cyan cursor-pointer transition-colors">
+                                        Tue, 10:00 AM EST
+                                    </div>
+                                    <div class="bg-slate-900 p-2.5 rounded border border-slate-800 text-center font-medium text-white hover:border-brand-cyan cursor-pointer transition-colors">
+                                        Tue, 2:30 PM EST
+                                    </div>
+                                    <div class="bg-slate-900 p-2.5 rounded border border-slate-800 text-center font-medium text-white hover:border-brand-cyan cursor-pointer transition-colors">
+                                        Wed, 11:15 AM EST
+                                    </div>
+                                    <div class="bg-slate-900 p-2.5 rounded border border-slate-800 text-center font-medium text-white hover:border-brand-cyan cursor-pointer transition-colors">
+                                        Wed, 4:00 PM EST
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description Panel -->
+                        <div class="lg:col-span-7 space-y-6">
+                            <span class="text-brand-cyan text-sm font-bold uppercase tracking-wider">Solution #3</span>
+                            <h2 class="text-3xl font-extrabold text-white">AI Appointment Booking Systems</h2>
+                            <p class="text-slate-400 leading-relaxed">
+                                No more phone tag, endless scheduling back-and-forths, or missed intake opportunities. Our Appointment Scheduler hooks up securely to systems like Calendly, Google Calendar, or custom CRM systems. It presents client-appropriate appointment slots right within normal conversations and instantly books them in.
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 text-sm text-slate-300">
+                                <div class="flex items-center space-x-3 bg-slate-900/60 border border-slate-800/40 p-3 rounded-xl">
+                                    <span class="text-brand-cyan font-bold text-lg">✓</span>
+                                    <span>2-Way Calendar Integration</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-slate-900/60 border border-slate-800/40 p-3 rounded-xl">
+                                    <span class="text-brand-cyan font-bold text-lg">✓</span>
+                                    <span>Time Zone Normalization</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-slate-900/60 border border-slate-800/40 p-3 rounded-xl">
+                                    <span class="text-brand-cyan font-bold text-lg">✓</span>
+                                    <span>SMS Reminder Automations</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-slate-900/60 border border-slate-800/40 p-3 rounded-xl">
+                                    <span class="text-brand-cyan font-bold text-lg">✓</span>
+                                    <span>Custom Confirmation Rules</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- ROI CALCULATOR PAGE -->
+        <div id="page-calculator" class="page-section">
+            <section class="py-16 relative">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Heading -->
+                    <div class="text-center max-w-3xl mx-auto mb-16">
+                        <span class="px-3 py-1 bg-brand-violet/10 text-brand-violet text-xs font-semibold rounded-full border border-brand-violet/20 uppercase tracking-widest">Efficiency Diagnostic</span>
+                        <h1 class="text-4xl lg:text-5xl font-extrabold text-white mt-4 tracking-tight">AI Savings Calculator</h1>
+                        <p class="text-slate-400 text-base mt-4 leading-relaxed">
+                            Input your business numbers below to estimate how many manual hours your staff can recapture and visual operational cash you can save through dedicated Vanguard AI solutions.
+                        </p>
+                    </div>
+
+                    <!-- Calculator Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
+                        <!-- Left Side: Inputs -->
+                        <div class="lg:col-span-7 bg-brand-dark border border-slate-800/80 p-8 rounded-2xl space-y-8 flex flex-col justify-between">
+
+                            <!-- Input 1: Support conversations per month -->
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="text-sm font-semibold text-slate-300">Manual Conversations / Leads per Month</label>
+                                    <span class="text-brand-cyan font-bold font-mono" id="calc-val-leads">300</span>
+                                </div>
+                                <input type="range" min="50" max="2500" step="50" value="300" id="calc-input-leads" oninput="calculateSavings()" class="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-brand-cyan">
+                                <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                                    <span>50</span>
+                                    <span>2,500+</span>
+                                </div>
+                            </div>
+
+                            <!-- Input 2: Average response overhead hours -->
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="text-sm font-semibold text-slate-300">Hours spent managing queries per week</label>
+                                    <span class="text-brand-cyan font-bold font-mono" id="calc-val-hours">15</span>
+                                </div>
+                                <input type="range" min="2" max="80" step="1" value="15" id="calc-input-hours" oninput="calculateSavings()" class="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-brand-cyan">
+                                <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                                    <span>2 hrs</span>
+                                    <span>80 hrs</span>
+                                </div>
+                            </div>
+
+                            <!-- Input 3: Hourly labor rate -->
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="text-sm font-semibold text-slate-300">Average employee hourly cost ($/hr)</label>
+                                    <span class="text-brand-cyan font-bold font-mono" id="calc-val-rate">$25</span>
+                                </div>
+                                <input type="range" min="15" max="100" step="5" value="25" id="calc-input-rate" oninput="calculateSavings()" class="w-full h-2 bg-slate-950 rounded-lg appearance-none cursor-pointer accent-brand-cyan">
+                                <div class="flex justify-between text-[10px] text-slate-500 mt-1">
+                                    <span>$15</span>
+                                    <span>$100</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-950/60 p-4 border border-slate-800 rounded-xl">
+                                <span class="text-xs text-slate-500 block leading-relaxed font-medium">
+                                    *Note: Estimations are calculated assuming AI agents automate 80% of repetitive basic support interactions, appointment bookings, and intake qualifications. Savings numbers exclude FusionAILaw hosting API metrics.
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Right Side: Savings Output Panel -->
+                        <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-brand-dark border border-brand-cyan/20 p-8 rounded-2xl relative overflow-hidden flex flex-col justify-between shadow-neon-cyan">
+                            <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand-cyan/10 rounded-full blur-3xl"></div>
+
+                            <div>
+                                <span class="text-xs font-bold tracking-wider text-brand-cyan uppercase block mb-1">Diagnostic Output</span>
+                                <h3 class="text-xl font-bold text-white mb-6">Estimated Impact Breakdown</h3>
+
+                                <div class="space-y-6">
+                                    <div>
+                                        <span class="text-xs text-slate-500 block uppercase font-semibold">Hours Saved / Month</span>
+                                        <span class="text-4xl font-extrabold text-white font-mono" id="calc-res-hours">48</span>
+                                        <span class="text-xs text-emerald-400 font-semibold block mt-1">✓ Recaptured workforce efficiency</span>
+                                    </div>
+
+                                    <div>
+                                        <span class="text-xs text-slate-500 block uppercase font-semibold">Monthly Dollar Savings</span>
+                                        <span class="text-4xl font-extrabold text-brand-cyan font-mono" id="calc-res-cash">$1,200</span>
+                                        <span class="text-xs text-emerald-400 font-semibold block mt-1">✓ Saved in unneeded support overhead</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt-8 border-t border-slate-800 mt-8 space-y-4">
+                                <button onclick="navigateTo('contact')" class="w-full py-4 bg-gradient-to-r from-brand-cyan to-brand-violet text-slate-950 font-bold rounded-xl transition-all shadow-lg hover:shadow-brand-cyan/30 text-center">
+                                    Claim This Efficiency Plan
+                                </button>
+                                <span class="text-center block text-xs text-slate-400 font-medium">No credit card or contractual obligations required.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- ABOUT US PAGE -->
+        <div id="page-about" class="page-section">
+            <section class="py-16 relative">
+                <!-- Abstract Blur Decors -->
+                <div class="absolute top-10 left-1/4 w-[350px] h-[350px] bg-brand-violet/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Intro -->
+                    <div class="text-center max-w-3xl mx-auto mb-20">
+                        <span class="px-3 py-1 bg-brand-cyan/10 text-brand-cyan text-xs font-semibold rounded-full border border-brand-cyan/20 uppercase tracking-widest">Our Mission & Background</span>
+                        <h1 class="text-4xl lg:text-5xl font-extrabold text-white mt-4 tracking-tight">Our Story & Ambition</h1>
+                        <p class="text-slate-400 text-base mt-4 leading-relaxed">
+                            Learn more about why we build, who we support, and the personal story that launched FusionAILaw.
+                        </p>
+                    </div>
+
+                    <!-- Founder & Story Grid Split -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                        <!-- Text Elements -->
+                        <div class="lg:col-span-7 space-y-8">
+                            <div>
+                                <span class="text-brand-cyan font-bold text-xs uppercase tracking-widest">The Ambition</span>
+                                <h2 class="text-3xl font-extrabold text-white mt-2">Mission & Vision</h2>
+                                <p class="text-slate-400 mt-4 leading-relaxed">
+                                    Our mission is to help small and service-based businesses compete in a rapidly changing world through practical AI automation. We create custom AI agents that reduce repetitive work, improve customer response times, and help businesses operate more efficiently without increasing overhead.
+                                </p>
+                                <p class="text-slate-400 mt-4 leading-relaxed">
+                                    We believe advanced AI tools should not be limited to massive corporations. By making intelligent automation accessible to growing businesses, we aim to help owners save time, increase revenue, and focus on what matters most — building lasting companies and serving their customers better.
+                                </p>
+                            </div>
+
+                            <div class="border-t border-slate-800 pt-8">
+                                <span class="text-brand-violet font-bold text-xs uppercase tracking-widest">The Genesis</span>
+                                <h2 class="text-3xl font-extrabold text-white mt-2">Founder-Oriented Version</h2>
+                                <p class="text-slate-400 mt-4 leading-relaxed italic border-l-2 border-brand-violet pl-4">
+                                    "What started as a vision to build a successful AI agency and graduate college debt free has evolved into a mission-driven company focused on helping small businesses thrive. We’re building AI systems that create real operational value, giving companies access to tools once reserved for large enterprises."
+                                </p>
+                                <div class="mt-6 flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-white border border-slate-700">
+                                        F
+                                    </div>
+                                    <div>
+                                        <span class="block text-white font-bold text-sm">FusionAILaw Founder</span>
+                                        <span class="block text-slate-500 text-xs">Architect & Founder</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Highlights Side Widget -->
+                        <div class="lg:col-span-5 bg-gradient-to-tr from-slate-900 to-brand-dark border border-slate-800 p-8 rounded-2xl space-y-6">
+                            <h3 class="text-lg font-bold text-white mb-2">Our Operating Core Principles</h3>
+
+                            <div class="space-y-4">
+                                <div class="bg-slate-950 p-4 border border-slate-800 rounded-xl">
+                                    <span class="text-brand-cyan font-bold text-xs block uppercase">1. Radical Practicality</span>
+                                    <p class="text-slate-400 text-xs mt-1">We don't build tech for tech's sake. Every automation pipeline we deploy must tie back to actual dollar or time savings.</p>
+                                </div>
+
+                                <div class="bg-slate-950 p-4 border border-slate-800 rounded-xl">
+                                    <span class="text-brand-violet font-bold text-xs block uppercase">2. Deep Integration Security</span>
+                                    <p class="text-slate-400 text-xs mt-1">Your data is secured. Our agents act strictly within programmed guidelines and read-only databases.</p>
+                                </div>
+
+                                <div class="bg-slate-950 p-4 border border-slate-800 rounded-xl">
+                                    <span class="text-brand-cyan font-bold text-xs block uppercase">3. Accessible Pricing</span>
+                                    <p class="text-slate-400 text-xs mt-1">No major long-term structural barriers. We keep entry-level automations affordable to help SMBs grow comfortably.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- CONTACT PAGE -->
+        <div id="page-contact" class="page-section">
+            <section class="py-16 relative">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Heading -->
+                    <div class="text-center max-w-3xl mx-auto mb-16">
+                        <span class="px-3 py-1 bg-brand-cyan/10 text-brand-cyan text-xs font-semibold rounded-full border border-brand-cyan/20 uppercase tracking-widest">Accelerate Operations</span>
+                        <h1 class="text-4xl lg:text-5xl font-extrabold text-white mt-4 tracking-tight">Book Your Free Discovery Call</h1>
+                        <p class="text-slate-400 text-base mt-4 leading-relaxed">
+                            Let's clarify your business bottlenecks. Complete this quick audit request and we'll analyze your scheduling, customer communication flow, or lead capture setup.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
+                        <!-- Contact Core Metrics Info -->
+                        <div class="lg:col-span-5 bg-gradient-to-tr from-slate-900 to-brand-dark border border-slate-800 p-8 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-6">What Happens Next?</h3>
+
+                                <div class="space-y-6 text-sm text-slate-400">
+                                    <div class="flex items-start space-x-4">
+                                        <div class="w-8 h-8 rounded-full bg-brand-cyan/10 text-brand-cyan flex items-center justify-center font-bold text-xs shrink-0">1</div>
+                                        <div>
+                                            <h4 class="text-white font-semibold">15-Min Exploratory Call</h4>
+                                            <p class="text-slate-500 text-xs mt-0.5">We analyze your business flow to see if manual lead-handling, scheduling, or support calls are draining your productive hours.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-4">
+                                        <div class="w-8 h-8 rounded-full bg-brand-violet/10 text-brand-violet flex items-center justify-center font-bold text-xs shrink-0">2</div>
+                                        <div>
+                                            <h4 class="text-white font-semibold">Custom Blueprint Design</h4>
+                                            <p class="text-slate-500 text-xs mt-0.5">We design a custom architectural map of how your AI systems can integrate and link with your active platforms.</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start space-x-4">
+                                        <div class="w-8 h-8 rounded-full bg-brand-cyan/10 text-brand-cyan flex items-center justify-center font-bold text-xs shrink-0">3</div>
+                                        <div>
+                                            <h4 class="text-white font-semibold">Launch & Refinement</h4>
+                                            <p class="text-slate-500 text-xs mt-0.5">We install the agents, execute diagnostic testing, align tone boundaries, and launch live.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt-8 border-t border-slate-800 mt-8 space-y-3">
+                                <div class="text-xs text-slate-500 font-semibold block uppercase">FusionAILaw Channels:</div>
+                                <div class="text-sm font-semibold text-white">consulting@fusionailaw.example.com</div>
+                            </div>
+                        </div>
+
+                        <!-- Interactive Contact intake Form -->
+                        <div class="lg:col-span-7 bg-brand-dark border border-slate-800 p-8 rounded-2xl">
+                            <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-6">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Your Name</label>
+                                        <input type="text" id="contact-name" required class="w-full bg-slate-950 border border-slate-800 focus:border-brand-cyan/60 rounded-xl px-4 py-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none transition-colors" placeholder="Alex Carter">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Work Email</label>
+                                        <input type="email" id="contact-email" required class="w-full bg-slate-950 border border-slate-800 focus:border-brand-cyan/60 rounded-xl px-4 py-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none transition-colors" placeholder="alex@company.com">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Company Name</label>
+                                        <input type="text" id="contact-company" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-cyan/60 rounded-xl px-4 py-3.5 text-sm text-slate-100 placeholder-slate-600 focus:outline-none transition-colors" placeholder="Carter Roofing Inc.">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Core Automation Focus</label>
+                                        <select id="contact-focus" class="w-full bg-slate-950 border border-slate-800 focus:border-brand-cyan/60 rounded-xl px-4 py-3.5 text-sm text-slate-300 focus:outline-none transition-colors">
+                                            <option value="cs">AI Customer Service Agents</option>
+                                            <option value="lead">AI Lead Qualification</option>
+                                            <option value="book">AI Appointment Booking</option>
+                                            <option value="other">Full Systems Architecture Audit</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-2">Tell us about your manual bottlenecks</label>
+                                    <textarea id="contact-message" rows="4" required class="w-full bg-slate-950 border border-slate-800 focus:border-brand-cyan/60 rounded-xl p-4 text-sm text-slate-100 placeholder-slate-600 focus:outline-none transition-colors" placeholder="We lose roughly 15 hours a week manually answering web leads and calling back clients to book times..."></textarea>
+                                </div>
+
+                                <button type="submit" class="w-full py-4 bg-gradient-to-r from-brand-cyan to-brand-violet hover:from-cyan-400 hover:to-violet-500 text-slate-950 font-bold rounded-xl transition-all shadow-lg hover:shadow-brand-cyan/25 flex items-center justify-center space-x-2">
+                                    <span>Send Audit Request</span>
+                                    <span>&rarr;</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-brand-darker border-t border-slate-900 pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <!-- Brand block -->
+                <div class="space-y-4">
+                    <a href="#" onclick="navigateTo('home'); return false;" class="flex items-center space-x-3 group">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-cyan to-brand-violet flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-base font-bold text-white tracking-wider">FUSION AI LAW</span>
+                    </a>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        Helping small & service-based businesses deploy production-ready AI systems to reduce repetitive manual overhead and grow capacity.
+                    </p>
+                </div>
+
+                <!-- Navigation Columns -->
+                <div>
+                    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-4">Solutions</h4>
+                    <ul class="space-y-2 text-xs text-slate-500">
+                        <li><button onclick="navigateTo('services')" class="hover:text-white transition-colors">Customer Service Agent</button></li>
+                        <li><button onclick="navigateTo('services')" class="hover:text-white transition-colors">Lead Qualification System</button></li>
+                        <li><button onclick="navigateTo('services')" class="hover:text-white transition-colors">Appointment Booking Bot</button></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-4">Resources</h4>
+                    <ul class="space-y-2 text-xs text-slate-500">
+                        <li><button onclick="navigateTo('calculator')" class="hover:text-white transition-colors">ROI Automation Calculator</button></li>
+                        <li><button onclick="navigateTo('about')" class="hover:text-white transition-colors">Mission & Story</button></li>
+                        <li><button onclick="navigateTo('contact')" class="hover:text-white transition-colors">Book Free AI Discovery Audit</button></li>
+                    </ul>
+                </div>
+
+                <!-- Copyright / Accolades -->
+                <div>
+                    <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-4">Our Commitment</h4>
+                    <p class="text-xs text-slate-500 leading-relaxed">
+                        We build to bridge the accessibility gap, ensuring massive corporate advantages do not crowd out growing service-based companies.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bottom Row -->
+            <div class="border-t border-slate-900 pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-600">
+                <span>&copy; 2026 FusionAILaw Automation. All rights reserved.</span>
+                <span class="mt-2 sm:mt-0 font-medium">Empowering growing teams through automation</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Pages Navigation Map
+        const pages = ['home', 'services', 'calculator', 'about', 'contact'];
+
+        // Core Page Router function
+        function navigateTo(pageId) {
+            // Verify valid page
+            if (!pages.includes(pageId)) return;
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Toggle active state in DOM
+            pages.forEach(p => {
+                const section = document.getElementById(`page-${p}`);
+                if (section) {
+                    if (p === pageId) {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.remove('active');
+                    }
+                }
+
+                // Update navigation visual classes (Desktop)
+                const navBtn = document.querySelector(`.nav-link[data-page="${p}"]`);
+                if (navBtn) {
+                    if (p === pageId) {
+                        navBtn.classList.remove('text-slate-300', 'hover:text-white');
+                        navBtn.classList.add('text-brand-cyan', 'bg-slate-800/60');
+                    } else {
+                        navBtn.classList.add('text-slate-300', 'hover:text-white');
+                        navBtn.classList.remove('text-brand-cyan', 'bg-slate-800/60');
+                    }
+                }
+
+                // Update navigation visual classes (Mobile)
+                const mobileNavBtn = document.querySelector(`[data-page-mobile="${p}"]`);
+                if (mobileNavBtn) {
+                    if (p === pageId) {
+                        mobileNavBtn.classList.remove('text-slate-300');
+                        mobileNavBtn.classList.add('text-brand-cyan', 'bg-slate-800/80');
+                    } else {
+                        mobileNavBtn.classList.add('text-slate-300');
+                        mobileNavBtn.classList.remove('text-brand-cyan', 'bg-slate-800/80');
+                    }
+                }
+            });
+        }
+
+        // Mobile Menu Drawer Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const iconHamburger = document.getElementById('menu-icon-hamburger');
+            const iconClose = document.getElementById('menu-icon-close');
+
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                iconHamburger.classList.add('hidden');
+                iconClose.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+                iconHamburger.classList.remove('hidden');
+                iconClose.classList.add('hidden');
+            }
+        }
+
+        // --- INTERACTIVE AI SANDBOX SIMULATOR ---
+        // Simulated Agent data logs
+        const simData = {
+            cs: {
+                title: "Customer Support Agent",
+                welcome: "Hi there! I am FusionAILaw's Customer Support Agent trained directly on your business specs. What can I answer for you today?",
+                prompts: [
+                    { label: "What are your business hours?", answer: "We are open Monday through Friday, from 8:30 AM to 6:00 PM EST. We also monitor emergencies 24/7!" },
+                    { label: "What is your typical turnaround?", answer: "Standard service setups take roughly 5 to 7 business days from system access authorization." },
+                    { label: "Can I talk to a human?", answer: "Absolutely! I can flag your email or phone for immediate callback. Would you like to write down your contact details?" }
+                ]
+            },
+            lead: {
+                title: "Lead Qualification Agent",
+                welcome: "Thanks for checking out our services! I am your interactive Qual Agent. I can quickly rate if we are a perfect match. Which service model do you fit?",
+                prompts: [
+                    { label: "Residential Contracting / Service", answer: "Perfect! We specialized directly in field integrations (roofing, plumbing, landscaping). Are you getting over 50 leads per month?" },
+                    { label: "B2B SaaS / Consulting", answer: "Great fit! Our booking bots help consultants clear calendar conflicts. Are you booking directly off cold traffic or manual ads?" },
+                    { label: "I want a custom automation build", answer: "Our custom team builds tailormade configurations for unique operations. Let me grab your company name so we can draft a blueprint." }
+                ]
+            },
+            book: {
+                title: "Scheduler Agent",
+                welcome: "Hello! Let's schedule your exploratory consultation directly. Which day works best to coordinate an opening?",
+                prompts: [
+                    { label: "Tomorrow morning", answer: "I have Tuesday at 9:30 AM or 11:00 AM EST available. Which slot fits your calendar?" },
+                    { label: "Next Monday afternoon", answer: "Monday is wide open! I can lock you in for 2:30 PM or 4:15 PM EST. Do you prefer Zoom or phone calls?" },
+                    { label: "See other slot options", answer: "I can search our database. Let's send a custom calendar booking link to your direct email!" }
+                ]
+            }
+        };
+
+        let currentAgentKey = 'cs';
+
+        function setSimulatedAgent(agentKey) {
+            currentAgentKey = agentKey;
+
+            // Update Tabs highlights
+            ['cs', 'lead', 'book'].forEach(key => {
+                const tab = document.getElementById(`sim-tab-${key}`);
+                if (key === agentKey) {
+                    tab.classList.remove('border-transparent', 'text-slate-400', 'hover:text-slate-200');
+                    tab.classList.add('border-brand-cyan', 'text-brand-cyan');
+                } else {
+                    tab.classList.add('border-transparent', 'text-slate-400', 'hover:text-slate-200');
+                    tab.classList.remove('border-brand-cyan', 'text-brand-cyan');
+                }
+            });
+
+            // Re-render Chat Area
+            const chatOutput = document.getElementById('chat-output');
+            chatOutput.innerHTML = ''; // clear
+
+            // Welcome Message
+            injectChatMessage('system', `System: Connected to ${simData[agentKey].title}`);
+            injectChatMessage('ai', simData[agentKey].welcome);
+
+            // Options Pills
+            renderSuggestionPills(agentKey);
+        }
+
+        function injectChatMessage(sender, text) {
+            const chatOutput = document.getElementById('chat-output');
+            const msgRow = document.createElement('div');
+            msgRow.className = "flex flex-col";
+
+            if (sender === 'system') {
+                msgRow.className = "text-center my-2";
+                msgRow.innerHTML = `<span class="px-2.5 py-1 bg-slate-900/80 text-slate-500 font-mono text-[10px] uppercase tracking-widest rounded-full border border-slate-800">${text}</span>`;
+            } else if (sender === 'ai') {
+                msgRow.innerHTML = `
+                    <div class="flex items-start space-x-2.5 max-w-[85%]">
+                        <div class="w-6 h-6 rounded bg-gradient-to-br from-brand-cyan to-brand-violet flex items-center justify-center text-white shrink-0">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl rounded-tl-none text-slate-300 leading-relaxed text-xs">
+                            ${text}
+                        </div>
+                    </div>
+                `;
+            } else if (sender === 'user') {
+                msgRow.className = "flex flex-col items-end";
+                msgRow.innerHTML = `
+                    <div class="bg-brand-cyan/10 border border-brand-cyan/20 p-3 rounded-xl rounded-tr-none text-slate-100 max-w-[85%] text-xs leading-relaxed">
+                        ${text}
+                    </div>
+                `;
+            }
+
+            chatOutput.appendChild(msgRow);
+            chatOutput.scrollTop = chatOutput.scrollHeight;
+        }
+
+        function renderSuggestionPills(agentKey) {
+            const container = document.getElementById('chat-suggestions');
+            container.innerHTML = '';
+
+            simData[agentKey].prompts.forEach(p => {
+                const btn = document.createElement('button');
+                btn.className = "px-3 py-1.5 bg-slate-950 hover:bg-slate-900 border border-slate-800 text-xs text-slate-300 font-medium rounded-lg hover:border-brand-cyan/40 transition-all text-left";
+                btn.textContent = p.label;
+                btn.onclick = () => handlePillSelect(p.label, p.answer);
+                container.appendChild(btn);
+            });
+        }
+
+        function handlePillSelect(userLabel, botAnswer) {
+            // Hide selection options temporary
+            document.getElementById('chat-suggestions').innerHTML = '';
+
+            // User Chat entry
+            injectChatMessage('user', userLabel);
+
+            // Display Typing Indicator
+            const typing = document.getElementById('agent-typing-indicator');
+            typing.classList.remove('invisible');
+
+            setTimeout(() => {
+                typing.classList.add('invisible');
+                injectChatMessage('ai', botAnswer);
+
+                // Re-render choices
+                renderSuggestionPills(currentAgentKey);
+            }, 800);
+        }
+
+        // --- INTERACTIVE ROI CALCULATOR LOGIC ---
+        function calculateSavings() {
+            // Read inputs
+            const leads = parseFloat(document.getElementById('calc-input-leads').value);
+            const hours = parseFloat(document.getElementById('calc-input-hours').value);
+            const rate = parseFloat(document.getElementById('calc-input-rate').value);
+
+            // Update range indicators text
+            document.getElementById('calc-val-leads').textContent = leads.toLocaleString();
+            document.getElementById('calc-val-hours').textContent = `${hours} hrs`;
+            document.getElementById('calc-val-rate').textContent = `$${rate}`;
+
+            // Automation estimation factors:
+            // Assuming we save 80% of repetitive communications overhead hours
+            const weeklyHoursSaved = hours * 0.8;
+            const monthlyHoursSaved = Math.round(weeklyHoursSaved * 4.3); // Avg weeks per month
+            const monthlySavingsDollar = Math.round(monthlyHoursSaved * rate);
+
+            // Update results UI
+            document.getElementById('calc-res-hours').textContent = monthlyHoursSaved;
+            document.getElementById('calc-res-cash').textContent = `$${monthlySavingsDollar.toLocaleString()}`;
+        }
+
+        // --- TOAST SYSTEM (INSTEAD OF ALERT) ---
+        function triggerToast(type, message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+
+            // Custom CSS tailwind classes depending on notification status
+            const themeClass = type === 'success'
+                ? 'border-emerald-500/30 bg-slate-950'
+                : 'border-brand-cyan/30 bg-slate-950';
+
+            toast.className = `flex items-center space-x-3 p-4 rounded-xl border ${themeClass} shadow-2xl transition-all duration-300 translate-x-12 opacity-0 max-w-sm pointer-events-auto`;
+
+            const icon = type === 'success'
+                ? '<span class="text-emerald-400 font-bold text-lg">✓</span>'
+                : '<span class="text-brand-cyan font-bold text-lg">i</span>';
+
+            toast.innerHTML = `
+                <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0">
+                    ${icon}
+                </div>
+                <div class="text-xs text-slate-300 font-medium">
+                    ${message}
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            // Trigger sliding animation
+            setTimeout(() => {
+                toast.classList.remove('translate-x-12', 'opacity-0');
+            }, 50);
+
+            // Dismiss automatically
+            setTimeout(() => {
+                toast.classList.add('translate-x-12', 'opacity-0');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 4500);
+        }
+
+        // --- CONTACT FORM HANDLER ---
+        function handleContactSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('contact-name').value;
+            const company = document.getElementById('contact-company').value || "Your company";
+            const focus = document.getElementById('contact-focus').value;
+
+            // Trigger visual Toast notification
+            triggerToast('success', `Thank you, ${name}! Your intake audit request has been registered. We will build your Custom Blueprint and contact you shortly.`);
+
+            // Reset Form Fields
+            document.getElementById('contact-form').reset();
+        }
+
+        // --- INITIALIZER ---
+        window.onload = function() {
+            // Activate Home Nav item
+            navigateTo('home');
+
+            // Initialize Sandbox chat with support bot loaded
+            setSimulatedAgent('cs');
+
+            // Initialize Calculator default values
+            calculateSavings();
+        };
+    </script>
+</body>
+</html>
